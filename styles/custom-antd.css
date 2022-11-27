@@ -1,0 +1,53 @@
+.ant-btn {
+    color: #16a34a
+}
+
+.ant-btn-primary {
+  color: #16a34a;
+  background: #0a2339;
+  border-color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background: #0a2339;
+  border-color: #0a2339;
+}
+
+.ant-btn-primary:active {
+    background: #0a2339;
+    border-color: #0a2339;
+  }
+  .ant-btn-primary:hover > a:only-child,
+  .ant-btn-primary:focus > a:only-child {
+    color: #16a34a;
+  }
+
+  .ant-btn-primary > a:only-child {
+    color: #16a34a;
+  }  
+ 
+  .ant-btn-primary:hover > a:only-child::after,
+  .ant-btn-primary:focus > a:only-child::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: transparent;
+    content: '';
+  }
+  .ant-btn-primary:active > a:only-child {
+    color: currentColor;
+  }
+  .ant-btn-primary:active > a:only-child::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: transparent;
+    content: '';
+  }
