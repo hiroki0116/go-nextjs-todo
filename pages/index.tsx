@@ -1,14 +1,18 @@
+import dayjs from 'dayjs';
+
 export default function Home() {
   return (
     <div className="max-w-md mx-auto">
-      <div className="bg-gray-900/90 shadow-2xl rounded-lg p-8 text-primary">
-        <p>...Welcome!</p>
+      <div className="bg-gray-900/80 shadow-2xl rounded-lg p-8 text-primary">
+        <p>{dayjs().format("MMM DD YYYY HH:mm:ss")}</p>
+        <p>user1@golang-todo$...welcome...</p>
         <br/>
-        <p>Manage your daily tasks.</p>
+        <p>Manage your daily tasks!</p>
         <br/>
-        <p>Something.</p>
-        <p>Something.</p>
-        <p>Something.</p>
+        <p>$ fetch tasks</p>
+        <p>$ create tasks</p>
+        <p>$ update tasks</p>
+        <p>$ delete tasks</p>
       </div>
     </div>
   )

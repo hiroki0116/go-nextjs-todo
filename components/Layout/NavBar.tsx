@@ -7,6 +7,8 @@ import Button from "antd/lib/button";
 import { isAuth } from "utils/auth";
 // context
 import { AuthContext } from "context/AuthContext";
+// components
+import {LoginModal} from "components/Auth/Login";
 
 const NavBar = () => {
   const { setShowLogin, setShowRegister } = useContext(AuthContext);
@@ -34,6 +36,7 @@ const NavBar = () => {
           </Button>
         </div>
       </div>
+      <LoginModal />
     </>
   );
 };

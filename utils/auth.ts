@@ -1,3 +1,4 @@
+import { IUser } from "interfaces/User";
 import cookie from "js-cookie";
 
 export const setCookie = (key: string, value: string) => {
@@ -5,6 +6,12 @@ export const setCookie = (key: string, value: string) => {
     cookie.set(key, value, {
       expires: 1,
     });
+  }
+};
+
+export const setLocalStorage = (key:string, value:string) => {
+  if (process.browser) {
+    localStorage.setItem(key, JSON.stringify(value));
   }
 };
 
@@ -18,6 +25,11 @@ export const removeCookie = (key: string) => {
 
 export const getCookie = (key: string, req?: any) => {
   return cookie.get(key);
+};
+
+export const saveUserAndToken = (user:string, token:string) => {
+  setCookie('token', token);
+  setLocalStorage('user', user);
 };
 
 export const currAuthUser = () => {
