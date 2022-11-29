@@ -75,7 +75,7 @@ const Login = () => {
       router.push("/tasks");
     } catch (err: any) {
       console.log(err?.response?.data?.message);
-      message.error(err?.message);
+      message.error(err?.response?.data?.message);
     } finally {
       setLoading(false);
     }
