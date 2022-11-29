@@ -4,7 +4,6 @@ export default function Home() {
   return (
     <div className="max-w-md mx-auto">
       <div className="bg-gray-900/80 shadow-2xl rounded-lg p-8 text-primary">
-        <p>{dayjs().format("MMM DD YYYY HH:mm:ss")}</p>
         <p>user1@golang-todo$...welcome...</p>
         <br/>
         <p>Manage your daily tasks!</p>

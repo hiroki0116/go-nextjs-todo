@@ -18,13 +18,13 @@ const RegisterModal = () => {
   
     return (
       <Modal
-        visible={showRegister}
+        open={showRegister}
         onCancel={() => {
           setShowRegister(false);
         }}
         footer={null}
         maskClosable={false}
-        className="w-full m-auto"
+        className="w-full m-auto max-w-md"
         width={500}
         centered
       >
@@ -51,54 +51,38 @@ const RegisterModal = () => {
         });
         // eslint-disable-next-line
     }, [showRegister]);
-  
-    const checkEmailExists = () => ({
-      async validator(_:any, value:any) {
-        if (value) {
-          const res = await APIWithoutAuth.post(`/auth/check/email?email=${value.toLowerCase()}`);
-          if (res.data.exists) {
-            return Promise.reject('We found an existing account with this email. Please click Login below.');
-          }
-        }
-        return Promise.resolve();
-      }
-    });
-  
+    
     const handleSubmit = async (values: any) => {
       try {
         setLoading(true);
-        const { email, password, firstName, lastName } = values;
+        const { email, password, first_name, last_name } = values;
+
 
         const userInfo = {
           email: email.toLowerCase().trim(),
           password,
-          first_name: firstName.trim(),
-          last_name: lastName.trim()
+          first_name: first_name.trim(),
+          last_name: last_name.trim()
         };
   
-        const registerRes = await APIWithoutAuth.post('/auth/register/email', {
-          ...userInfo
-        });
-
-        
-        if (!registerRes.data.success) {
+        const {data} = await APIWithoutAuth.post('/users/signup', {...userInfo});
+        const newUser = data.data;
+        if (!newUser) {
             setLoading(false);
-            message.error(registerRes.data.message);
+            message.error("Something went wrong. Please try again.");
             return;
         }
-        const newUser = registerRes.data.user;
         setUser(newUser);
-        saveUserAndToken(newUser,registerRes.data.headers["Authorization"])
+        saveUserAndToken(newUser,newUser["token"])
         form.resetFields();
         message.success('Account created successfully.');
-  
         setLoading(false);
         setShowRegister(false);
         router.push("/tasks");
         return;
       } catch (error: any) {
         setLoading(false);
-        message.error('Error in register. Please try again later.');
+        message.error('Error in register.',error);
       }
     };
   
@@ -143,7 +127,6 @@ const RegisterModal = () => {
             { required: true, message: 'Please enter your email' },
             { whitespace: true, message: 'Email cannot be empty' },
             { type: 'email', message: 'Not valid email' },
-            checkEmailExists
           ]}
           required
           normalize={(value) => value.trim()}
@@ -171,7 +154,7 @@ const RegisterModal = () => {
       <Spin spinning={loading}>
         <div className="p-6">
           {emailForm()}
-          <div className="font-dark-gray text-center">
+          <div className="font-dark-gray text-center tracking-tighter">
             Already have a Spare Staff account?
             <Button
               type="link"
