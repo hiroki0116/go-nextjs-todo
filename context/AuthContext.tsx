@@ -1,5 +1,4 @@
 import React, { useState, useEffect, createContext } from 'react';
-import { setCookie } from 'utils/auth';
 import { IUser } from 'interfaces/User';
 
 type AuthContent = {

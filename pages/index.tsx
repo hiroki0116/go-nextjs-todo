@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 export default function Home() {
   return (
     <div className="max-w-md mx-auto">

@@ -20,8 +20,10 @@ const APIWithoutAuth: AxiosInstance = axios.create({
 // add token to header if currentUser is logged-in
 API.interceptors.request.use(async (config) => {
   if (isAuth()) {
-    const token = getCookie("Authorization");
-    config.headers = { Authorization: token };
+    const token = getCookie("token")?.toString();
+    //@ts-ignore
+    config.headers = {Authorization: `Bearer ${token}`};
+    console.log(config.headers);
     return config;
   } else {
     // no way to get token
