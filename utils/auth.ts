@@ -23,8 +23,8 @@ export const removeCookie = (key: string) => {
   }
 };
 
-export const getCookie = (key: string, req?: any) => {
-  return cookie.get(key);
+export const getCookie = (key: string, req?: any): string => {
+  return cookie.get(key) as string;
 };
 
 export const saveUserAndToken = (user:string, token:string) => {

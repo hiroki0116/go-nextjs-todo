@@ -4,9 +4,9 @@ import { API, APIWithoutAuth } from "utils/api";
 import { isAuth } from "utils/auth";
 import message from "antd/lib/message";
 import Empty from "antd/lib/empty";
-import CheckSquareFilled from "@ant-design/icons/CheckSquareFilled";
+import Skeleton from 'antd/lib/skeleton';
+import CheckSquare from "@ant-design/icons/CheckSquareOutlined";
 import EditFilled from "@ant-design/icons/EditFilled";
-import { getCookie } from "utils/auth";
 
 const ListTask = () => {
   const { tasks, setTasks } = useContext(TaskContext);
@@ -20,16 +20,9 @@ const ListTask = () => {
   const fetchTasks = async () => {
     try {
       setLoading(true);
-      const options = {
-        method: "GET",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${getCookie("token")?.toString()}`},
-      };
-      // const { data } = await API.get("/tasks");
-      const response = await fetch("http://localhost:8000/api/v1/tasks", options);
-      const data = await response.json();
-      console.log(data);
-      if (data?.data?.tasks) {
-        setTasks(data.data.tasks);
+      const { data } = await API.get("/tasks/");
+      if (data?.data) {
+        setTasks(data.data);
       }
     } catch (error: any) {
       message.error(error.response?.data?.message);
@@ -38,6 +31,13 @@ const ListTask = () => {
     }
   };
 
+  if (loading) return (
+    <div className='grid grid-cols-1 justify-items-center items-center'>
+      <Skeleton active />
+      <Skeleton active />
+    </div>
+  )
+
   if (!tasks.length)
     return (
       <Empty
@@ -45,6 +45,7 @@ const ListTask = () => {
         className="py-3"
       />
     );
+
   return (
     <div className="py-5 flex flex-col gap-3">
       {tasks.map((task) => (
@@ -53,11 +54,11 @@ const ListTask = () => {
           className="flex justify-between rounded border px-3 py-2 text-primary"
         >
           <div className="text-left">
-            this is task title asdf asdf asdf asdf asdf asdf{" "}
+            {task.title}
           </div>
           <div className="flex items-center gap-4 text-lg">
             <EditFilled className="cursor-pointer" />
-            <CheckSquareFilled className="cursor-pointer" />
+            <CheckSquare className="cursor-pointer" />
           </div>
         </div>
       ))}

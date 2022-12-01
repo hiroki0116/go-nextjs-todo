@@ -1,12 +1,10 @@
-import { useContext } from "react";
+import {useState, useContext, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 // third party
 import HomeOutlined from "@ant-design/icons/HomeOutlined";
 import Button from "antd/lib/button";
-import message from "antd/lib/message";
 // utills
-import { isAuth, removeCookie } from "utils/auth";
 // context
 import { AuthContext } from "context/AuthContext";
 // components
@@ -14,13 +12,8 @@ import { LoginModal } from "components/Auth/Login";
 import { RegisterModal } from "components/Auth/Register";
 
 const NavBar = () => {
-  const { setShowLogin, setShowRegister } = useContext(AuthContext);
+  const { setShowLogin, setShowRegister, isLoggedin, handleLogout } = useContext(AuthContext);
   const router = useRouter();
-  const handleLogout = () => {
-    removeCookie("token");
-    message.success("Successfully logged out");
-    router.push("/");
-  };
 
   return (
     <>
@@ -29,12 +22,12 @@ const NavBar = () => {
           <HomeOutlined />
         </Link>
         <div className="flex sm:gap-5 gap-2 z-20">
-          {isAuth() ? (
+          {isLoggedin ? (
             <>
-              <Button href="/tasks" type="primary" shape="round">
+              <Button type="primary" shape="round" onClick={()=>{router.push('/tasks')}}>
                 Tasks
               </Button>
-              <Button onClick={handleLogout} type="link" shape="round">
+              <Button onClick={handleLogout} shape="round">
                 Logout
               </Button>
             </>
