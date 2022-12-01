@@ -48,9 +48,9 @@ const ListTask = () => {
 
   return (
     <div className="py-5 flex flex-col gap-3">
-      {tasks.map((task) => (
+      {tasks.map((task,index) => (
         <div
-          key={task._id}
+          key={index}
           className="flex justify-between rounded border px-3 py-2 text-primary"
         >
           <div className="text-left">
