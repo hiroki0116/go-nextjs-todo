@@ -1,14 +1,22 @@
-import React,{ useState, useEffect, createContext } from 'react';
+import React,{ useState, createContext } from 'react';
 import { ITask } from 'interfaces/Task';
+import message from 'antd/lib/message';
+import { fetchAllTasks } from 'services/task';
 
 type TaskContent = {
     tasks: ITask[];
     setTasks: (t: ITask[]) => void;
+    loading: boolean;
+    setLoading: (l: boolean) => void;
+    fetchTasks: () => Promise<void>;
 }
 
 const initialState = {
     tasks: [],
-    setTasks: () => {}
+    setTasks: () => {},
+    loading: false,
+    setLoading: () => {},
+    fetchTasks: () => Promise.resolve()
 }
 
 export const TaskContext = createContext<TaskContent>(initialState);
@@ -16,10 +24,28 @@ export const TaskContext = createContext<TaskContent>(initialState);
 
 export const TaskProvider = ({ children }: {children: any;}) => {
     const [tasks, setTasks] = useState<ITask[]>([]);
+    const [loading, setLoading] = useState(false);
+
+    const fetchTasks = async (): Promise<void> => {
+        try {
+          setLoading(true);
+          const { data } = await fetchAllTasks();
+          if (data?.data) {
+            setTasks(data.data);
+          }
+        } catch (error: any) {
+          message.error(error.response?.data?.message);
+        } finally {
+          setLoading(false);
+        }
+      };
 
     const value = {
         tasks,
-        setTasks
+        setTasks,
+        loading,
+        setLoading,
+        fetchTasks
     }
 
     return (

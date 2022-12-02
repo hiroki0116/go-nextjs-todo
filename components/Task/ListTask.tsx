@@ -1,35 +1,20 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+// components
 import { TaskContext } from "context/TaskContext";
-import { API, APIWithoutAuth } from "utils/api";
+import TaskCard from './TaskCard'
+// utils
 import { isAuth } from "utils/auth";
-import message from "antd/lib/message";
+// third party
 import Empty from "antd/lib/empty";
 import Skeleton from 'antd/lib/skeleton';
-import CheckSquare from "@ant-design/icons/CheckSquareOutlined";
-import EditFilled from "@ant-design/icons/EditFilled";
 
 const ListTask = () => {
-  const { tasks, setTasks } = useContext(TaskContext);
-  const [loading, setLoading] = useState(false);
+  const { tasks, fetchTasks, loading } = useContext(TaskContext);
 
   useEffect(() => {
     fetchTasks();
     // eslint-disable-next-line
   }, [isAuth()]);
-
-  const fetchTasks = async () => {
-    try {
-      setLoading(true);
-      const { data } = await API.get("/tasks/");
-      if (data?.data) {
-        setTasks(data.data);
-      }
-    } catch (error: any) {
-      message.error(error.response?.data?.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) return (
     <div className='grid grid-cols-1 justify-items-center items-center'>
@@ -44,23 +29,12 @@ const ListTask = () => {
         description={<span className="text-primary">No Task Yet</span>}
         className="py-3"
       />
-    );
+   );
 
   return (
     <div className="py-5 flex flex-col gap-3">
       {tasks.map((task,index) => (
-        <div
-          key={index}
-          className="flex justify-between rounded border px-3 py-2 text-primary"
-        >
-          <div className="text-left">
-            {task.title}
-          </div>
-          <div className="flex items-center gap-4 text-lg">
-            <EditFilled className="cursor-pointer" />
-            <CheckSquare className="cursor-pointer" />
-          </div>
-        </div>
+        <TaskCard key={index} task={task} />
       ))}
     </div>
   );
