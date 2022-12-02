@@ -17,7 +17,7 @@ const UpdateTaskModal = dynamic(() => import("./UpdateTaskModal"), {
 import { updateTaskById, deleteTaskById } from "services/task";
 
 const TaskCard = ({ task }: { task: ITask }) => {
-  const { fetchTasks, loading, setLoading } = useContext(TaskContext);
+  const { fetchTasks, loading, setLoading,setTasks,tasks } = useContext(TaskContext);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -44,8 +44,8 @@ const TaskCard = ({ task }: { task: ITask }) => {
     try {
       setLoading(true);
       const { data } = await deleteTaskById(task._id);
-      if (data?.success) message.success(data.data);
-      fetchTasks();
+      if (data?.success)message.success(data.data);
+      setTasks([...tasks.filter(curr => curr._id !== task._id)])
     } catch (error: any) {
       message.error(error.response?.data?.message);
     } finally {

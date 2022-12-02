@@ -14,7 +14,7 @@ const ListTask = () => {
   useEffect(() => {
     fetchTasks();
     // eslint-disable-next-line
-  }, [isAuth()]);
+  }, []);
 
   if (loading) return (
     <div className='grid grid-cols-1 justify-items-center items-center'>
