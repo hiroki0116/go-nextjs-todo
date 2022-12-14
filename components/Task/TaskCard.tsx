@@ -17,21 +17,19 @@ const UpdateTaskModal = dynamic(() => import("./UpdateTaskModal"), {
 import { updateTaskById, deleteTaskById } from "services/task";
 
 const TaskCard = ({ task }: { task: ITask }) => {
-  const { fetchTasks, loading, setLoading,setTasks,tasks } = useContext(TaskContext);
+  const { loading, setLoading,setTasks,tasks } = useContext(TaskContext);
 
   const [showModal, setShowModal] = useState(false);
 
   const handleCompleteTask = async () => {
     try {
       setLoading(true);
-      const { data } = await updateTaskById(task._id, {
+      setTasks([...tasks.map(curr => curr._id === task._id ? {...curr,completed:!curr.completed} : curr)])
+      await updateTaskById(task._id, {
         ...task,
         completed: !task.completed,
       });
-      if (data?.success) {
-        message.success(data.data);
-        fetchTasks();
-      }
+      message.success("Updated successfully");
     } catch (error: any) {
       message.error(error.response?.data?.message);
     } finally {
@@ -40,12 +38,11 @@ const TaskCard = ({ task }: { task: ITask }) => {
   };
 
   const handleDeleteTask = async (e) => {
-    e.stopPropagation();
     try {
       setLoading(true);
-      const { data } = await deleteTaskById(task._id);
-      if (data?.success)message.success(data.data);
       setTasks([...tasks.filter(curr => curr._id !== task._id)])
+      const data = await deleteTaskById(task._id);
+      message.success(data);
     } catch (error: any) {
       message.error(error.response?.data?.message);
     } finally {
@@ -56,10 +53,10 @@ const TaskCard = ({ task }: { task: ITask }) => {
   return (
     <div
       className={`flex justify-between rounded border px-3 py-2 mr-3 text-primary relative ${
-        task.completed ? "bg-slate-900" : ""
+        task.completed ? "bg-slate-900 border-none" : "hover:bg-slate-800/90 transition duration-300 transform ease-in-out"
       }`}
     >
-      <div className="text-left">{task.title}</div>
+      <div className={`text-left ${!task.completed && "animate-pulse"}`}>{task.title}</div>
       <div className="flex items-center gap-4 text-lg">
         <EditFilled
           className="cursor-pointer hover:scale-150 transition duration-300 transform ease-in-out"

@@ -1,29 +1,26 @@
 import { useState, useContext } from "react";
 import Button from "antd/lib/button";
 import message from "antd/lib/message";
-import { API } from 'utils/api';
 import { TaskContext } from "context/TaskContext";
 // services
-import { createTask } from 'services/task';
+import { createTask } from "services/task";
 
 const CreateTask = () => {
-  const { fetchTasks, loading, setLoading } = useContext(TaskContext);
+  const { loading, setLoading, tasks, setTasks } =
+    useContext(TaskContext);
   const [task, setTask] = useState("");
-
 
   const handleCreateTask = async () => {
     try {
-        if(task == ""){
-          message.error("Task cannot be empty");
-          return;
-        }
-        setLoading(true);
-        const { data } = await createTask({ title: task.trim()});
-        if (data?.success){
-            message.success(data.data);
-            setTask("");
-            fetchTasks();
-        }
+      if (task == "") {
+        message.error("Task cannot be empty");
+        return;
+      }
+      setLoading(true);
+      const data = await createTask({ title: task.trim() });
+      setTasks([...tasks, data]);
+      message.success("Task created successfully");
+      setTask("");
     } catch (error: any) {
       message.error(error.response?.data?.message);
     } finally {
@@ -32,7 +29,7 @@ const CreateTask = () => {
   };
   return (
     <div className="py-5">
-      <div className='flex gap-5'>
+      <div className="flex gap-5">
         <input
           type="text"
           placeholder="Add a task"

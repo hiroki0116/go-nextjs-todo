@@ -29,10 +29,8 @@ export const TaskProvider = ({ children }: {children: any;}) => {
     const fetchTasks = async (): Promise<void> => {
         try {
           setLoading(true);
-          const { data } = await fetchAllTasks();
-          if (data?.data) {
-            setTasks(data.data);
-          }
+          const data = await fetchAllTasks();
+          setTasks(data);
         } catch (error: any) {
           message.error(error.response?.data?.message);
         } finally {

@@ -13,50 +13,48 @@ import message from "antd/lib/message";
 const UpdateTaskModal = ({
   showModal,
   setShowModal,
-  task
+  task,
 }: {
   showModal: boolean;
   setShowModal: (boolean) => void;
   task: ITask;
 }) => {
-  const { fetchTasks, loading, setLoading } = useContext(TaskContext);
-  const [newTitle, setNewTitle] = useState<string>('');
+  const { loading, setLoading, tasks } = useContext(TaskContext);
+  const [newTitle, setNewTitle] = useState<string>("");
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchTask();
     // eslint-disable-next-line
-  },[])
-
+  }, []);
 
   const fetchTask = async () => {
     try {
-        setLoading(true);
-        const { data } = await fetchTaskById(task._id);
-        if (data?.data) {
-            setNewTitle(data.data.title);
-        }
+      setLoading(true);
+      const data = await fetchTaskById(task._id);
+      setNewTitle(data.title);
     } catch (error: any) {
-        message.error(error.response?.data?.message);
+      message.error(error.response?.data?.message);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-  }
+  };
 
   const handleUpdateTask = async () => {
     try {
-        setLoading(true);
-        const { data } = await updateTaskById(task._id, {...task, title: newTitle.trim() });
-        if (data?.success) {
-            message.success(data.data);
-            fetchTasks();
-            setShowModal(false);
-        }
-    } catch (error:any) {
+      setLoading(true);
+      const data = await updateTaskById(task._id, {
+        ...task,
+        title: newTitle.trim(),
+      });
+      message.success("Updated successfully");
+      tasks[tasks.findIndex((curr) => curr._id === task._id)] = data;
+      setShowModal(false);
+    } catch (error: any) {
       message.error(error.response?.data?.message);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Modal
