@@ -20,24 +20,7 @@ const UpdateTaskModal = ({
   task: ITask;
 }) => {
   const { loading, setLoading, tasks } = useContext(TaskContext);
-  const [newTitle, setNewTitle] = useState<string>("");
-
-  useEffect(() => {
-    fetchTask();
-    // eslint-disable-next-line
-  }, []);
-
-  const fetchTask = async () => {
-    try {
-      setLoading(true);
-      const data = await fetchTaskById(task._id);
-      setNewTitle(data.title);
-    } catch (error: any) {
-      message.error(error.response?.data?.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [newTitle, setNewTitle] = useState<string>(task.title);
 
   const handleUpdateTask = async () => {
     try {

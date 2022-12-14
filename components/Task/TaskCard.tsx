@@ -10,9 +10,7 @@ import CloseOutlined from "@ant-design/icons/CloseOutlined";
 import message from "antd/lib/message";
 // components
 import { TaskContext } from "context/TaskContext";
-const UpdateTaskModal = dynamic(() => import("./UpdateTaskModal"), {
-  ssr: false,
-});
+const UpdateTaskModal = dynamic(() => import("./UpdateTaskModal"), {ssr: false});
 // services
 import { updateTaskById, deleteTaskById } from "services/task";
 
