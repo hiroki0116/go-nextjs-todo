@@ -19,7 +19,7 @@ const NavBar = () => {
     <>
       <div className="bg-gray-900/50  sm:px-20 px-3 fixed inset-x-0 top-0 items-center z-50 h-12 transition duration-1000 ease-in-out flex justify-between">
         <Link href={"/"} className="text-2xl text-primary pb-2">
-          <HomeOutlined />
+          <HomeOutlined className="cursor-pointer hover:scale-150 transition duration-300 transform ease-in-out"/>
         </Link>
         <div className="flex sm:gap-5 gap-2 z-20">
           {isLoggedin ? (

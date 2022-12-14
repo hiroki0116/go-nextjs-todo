@@ -1,16 +1,10 @@
+import Image from 'next/image';
+
+const fileUrl = "https://res.cloudinary.com/sixty-seconds-idea-training-project/image/upload/v1671031763/ApplicationLayout/terminal_f0ndac.gif";
 export default function Home() {
   return (
-    <div className="max-w-md mx-auto">
-      <div className="bg-gray-900/80 shadow-2xl rounded-lg p-8 text-primary">
-        <p>user1@golang-todo$...welcome...</p>
-        <br/>
-        <p>Manage your daily tasks!</p>
-        <br/>
-        <p>$ fetch tasks</p>
-        <p>$ create tasks</p>
-        <p>$ update tasks</p>
-        <p>$ delete tasks</p>
-      </div>
+    <div className="flex justify-center">
+      <Image src={fileUrl} width={650} height={500} alt="termianlgif" className='shadow-2xl rounded'/>
     </div>
   )
 }
