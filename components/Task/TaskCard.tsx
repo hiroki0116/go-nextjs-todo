@@ -54,7 +54,7 @@ const TaskCard = ({ task }: { task: ITask }) => {
         task.completed ? "bg-slate-900 border-none" : "hover:bg-slate-800/90 transition duration-300 transform ease-in-out"
       }`}
     >
-      <div className={`text-left ${!task.completed && "animate-pulse"}`}>{task.title}</div>
+      <div className={`text-left ${!task.completed ? "animate-pulse text-white" : "text-primary"}`}>{task.title}</div>
       <div className="flex items-center gap-4 text-lg">
         <EditFilled
           className="cursor-pointer hover:scale-150 transition duration-300 transform ease-in-out"

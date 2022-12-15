@@ -13,7 +13,7 @@ body {
   font-family: 'Fredoka', sans-serif;
   font-family: 'Nunito', sans-serif;
   font-family: 'Quicksand', sans-serif;
-  background-image: url('../public/asset/bg-cyber1.jpg');
+  background-image: url('../public/asset/lorenzo-herrera-p0j-mE6mGo4-unsplash.jpg');
   background-size: cover;
   letter-spacing: 0.2rem;
 }
@@ -40,4 +40,13 @@ a {
 .secondary-btn:hover {
   background-color: #f15927;
   transition: all 0.6s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    background-image: url('../public/asset/lorenzo-herrera-p0j-mE6mGo4-unsplash.jpg');
+    background-size: cover;
+    background-position: right;
+    height: 100vh;
+  }
 }

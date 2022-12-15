@@ -32,19 +32,19 @@ const CreateTask = () => {
       <div className="flex gap-5">
         <input
           type="text"
-          placeholder="Add a task"
-          className="bg-slate-900 rounded py-1 px-3  shadow w-full text-primary focus:outline-none focus:shadow-outline"
+          placeholder="Add a task here"
+          className="bg-cyan-900/80 border border-slate-200/10 rounded py-1 px-3  shadow w-full text-primary focus:shadow-outline"
           value={task}
           onChange={(e) => setTask(e.target.value)}
         />
         <Button
           type="primary"
-          className="bg-slate-900"
+          className="bg-slate-900 border border-slate-200/10"
           onClick={handleCreateTask}
           loading={loading}
           disabled={loading}
         >
-          Submit
+          Create
         </Button>
       </div>
     </div>
