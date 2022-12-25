@@ -108,7 +108,7 @@ const Login = () => {
             rules={[{ required: true, message: "Please enter your password" }]}
           >
             <Input.Password
-              className="p-2 rounded"
+              className="p-2 rounded text-16"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

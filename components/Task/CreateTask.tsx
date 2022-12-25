@@ -33,7 +33,7 @@ const CreateTask = () => {
         <input
           type="text"
           placeholder="Add a task here"
-          className="bg-cyan-900/80 border border-slate-200/10 rounded py-1 px-3  shadow w-full text-primary focus:shadow-outline"
+          className="bg-cyan-900/80 border border-slate-200/10 rounded py-1 px-3  shadow w-full text-primary focus:shadow-outline text-16"
           value={task}
           onChange={(e) => setTask(e.target.value)}
         />

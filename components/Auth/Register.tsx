@@ -141,7 +141,7 @@ const RegisterModal = () => {
           ]}
           required
         >
-          <Input.Password className="p-2 rounded font-dark-gray" placeholder="Password" disabled={loading} />
+          <Input.Password className="p-2 rounded font-dark-gray text-16" placeholder="Password" disabled={loading} />
         </Form.Item>
         <Button className="w-full rounded h-auto py-2 mb-2" htmlType="submit" type="primary" disabled={loading}>
           Sign Up

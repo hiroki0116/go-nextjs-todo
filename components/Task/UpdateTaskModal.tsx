@@ -53,7 +53,7 @@ const UpdateTaskModal = ({
         <input
           type="text"
           placeholder="Edit title"
-          className="bg-slate-900 rounded py-1 px-3  shadow w-full text-primary focus:outline-none focus:shadow-outline"
+          className="bg-slate-900 rounded py-1 px-3  shadow w-full text-primary focus:outline-none focus:shadow-outline text-16"
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
         />
