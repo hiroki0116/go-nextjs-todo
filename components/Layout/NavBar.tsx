@@ -2,8 +2,10 @@ import { useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 // third party
+import Alert from "antd/lib/alert";
 import BuildFilled from "@ant-design/icons/BuildFilled";
 import Button from "antd/lib/button";
+import Marquee from "react-fast-marquee";
 // context
 import { AuthContext } from "context/AuthContext";
 // components
@@ -16,7 +18,7 @@ const NavBar = () => {
   const router = useRouter();
   return (
     <>
-      <div className="bg-gray-900/50  sm:px-20 px-3 fixed inset-x-0 top-0 items-center z-50 h-12 transition duration-1000 ease-in-out flex justify-between">
+      <div className="bg-gray-900/50 sm:px-20 px-3 items-center z-50 h-12 transition duration-1000 ease-in-out flex justify-between">
         <Link href={"/"} className="text-2xl text-primary">
           <div className="flex flex-col ">
             <BuildFilled className="self-center cursor-pointer hover:scale-150 transition duration-300 transform ease-in-out" />
@@ -59,6 +61,21 @@ const NavBar = () => {
           )}
         </div>
       </div>
+      <Alert
+        banner
+        className=""
+        message={
+          <Marquee
+            pauseOnHover
+            gradient={false}
+            className="font-montserrat"
+            speed={150}
+          >
+            This program is running on a low budget, so please allow 30 seconds
+            for the server to start up <span className="text-lg">☕</span>
+          </Marquee>
+        }
+      />
       <LoginModal />
       <RegisterModal />
     </>
