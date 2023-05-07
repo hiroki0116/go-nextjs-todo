@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 // components
-import { TaskContext } from "context/TaskContext";
+import { TaskContext } from "features/task/store/TaskContext";
 import TaskCard from "./TaskCard";
 // utils
-import { isAuth } from "utils/auth";
+import { isAuth } from "features/auth/utils/auth";
 // third party
 import Empty from "antd/lib/empty";
 import Skeleton from "antd/lib/skeleton";
@@ -16,7 +16,8 @@ const ListTask = () => {
     // eslint-disable-next-line
   }, []);
 
-  if (loading) return (
+  if (loading)
+    return (
       <div className="grid grid-cols-1 justify-items-center items-center">
         <Skeleton active />
         <Skeleton active />
