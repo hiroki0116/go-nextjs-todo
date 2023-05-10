@@ -8,6 +8,7 @@ import Spin from "antd/lib/spin";
 import Input from "antd/lib/input";
 import Form from "antd/lib/form";
 import Button from "antd/lib/button";
+import Modal from "antd/lib/modal";
 import GoogleOutlined from "@ant-design/icons/GoogleOutlined";
 import {
   setPersistence,
@@ -21,12 +22,6 @@ import { AuthContext } from "features/auth/store/AuthContext";
 // graphql
 import { FIND_USER_BY_EMAIL } from "graphql/queries/user";
 import { apolloClient } from "utils/apolloClient";
-import Modal from "antd/lib/modal";
-
-type LoginProps = {
-  setShowEmailInput: (showEmailInput: boolean) => void;
-  inputEmail: string;
-};
 
 const LoginModal = () => {
   const { showLogin, setShowLogin } = useContext(AuthContext);
@@ -51,7 +46,6 @@ const Login = ({ isToggle }: { isToggle?: boolean }) => {
     useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const router = useRouter();
@@ -88,11 +82,6 @@ const Login = ({ isToggle }: { isToggle?: boolean }) => {
       router,
     };
     signInWithGoogle(props);
-  };
-
-  const handleForgotPassword = () => {
-    isToggle && setShowLogin(false);
-    router.push("/auth/forgot-password");
   };
 
   const handleSubmit = async () => {

@@ -11,6 +11,7 @@ import { getCookie, setCookie, isAuth } from "../features/auth/utils/auth";
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL,
+  credentials: "include",
 });
 
 const getToken = async (): Promise<string> => {
