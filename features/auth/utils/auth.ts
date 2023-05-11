@@ -5,13 +5,16 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 // utils
 import isEmpty from "lodash/isEmpty";
 // types
+import { SIGN_UP } from "graphql/mutations/auth";
 import type MessageApi from "antd/lib/message";
-import type { User } from "models/User";
+import { apolloClient } from "graphql/apolloClient";
+import { FIND_USER_BY_EMAIL } from "graphql/queries/user";
+import { IUser } from "models/User";
 
 type GoogleLoginProps = {
   setLoading: (loading: boolean) => void;
   setShowLogin: (showLogin: boolean) => void;
-  setUser: (user: User) => void;
+  setUser: (user: IUser) => void;
   message: typeof MessageApi;
   router: NextRouter;
 };
@@ -29,27 +32,42 @@ export const signInWithGoogle = ({
   signInWithPopup(auth, provider)
     .then(async (result: any) => {
       setLoading(true);
-      const user = result.user;
-      // graphql getUserByemail
-      // const { data } = await APIWithoutAuth.get(`/users?email=${user.email}`);
+      const googleUser = result.user;
+      const { data } = await apolloClient.query<{ userByEmail: IUser }>({
+        query: FIND_USER_BY_EMAIL,
+        variables: { email: googleUser.email },
+      });
+      const currUser = data.userByEmail;
 
-      if (isEmpty(data.user)) {
-        // graphql signup
-        // const { data } = await APIWithoutAuth.post("/users/signup", {
-        //   email: user.email,
-        //   name: user.displayName,
-        //   firebaseUID: user.uid,
-        // });
-        setUser(data.user);
-        saveUserAndToken(data.user, user.accessToken);
+      if (isEmpty(currUser)) {
+        const { data } = await apolloClient.mutate<{ createUser: IUser }>({
+          mutation: SIGN_UP,
+          variables: {
+            input: {
+              name: googleUser.displayName,
+              password: googleUser.uid,
+              email: googleUser.email,
+              firebaseId: googleUser.uid,
+            },
+          },
+        });
+
+        const newUser = data?.createUser;
+        if (!newUser) {
+          setLoading(false);
+          message.error("Something went wrong. Please try again.");
+          return;
+        }
+        setUser(newUser);
+        saveUserAndToken(newUser, googleUser.accessToken);
         message.success("Login success.");
         setShowLogin(false);
         router.push("/tasks");
         return;
       }
-      setUser(data.user);
+      setUser(data.userByEmail);
       setLoading(false);
-      saveUserAndToken(data.user, user.accessToken);
+      saveUserAndToken(data.userByEmail, googleUser.accessToken);
       message.success("Login success.");
       setShowLogin(false);
       router.push("/tasks");

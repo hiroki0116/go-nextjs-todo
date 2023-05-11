@@ -14,7 +14,7 @@ import { saveUserAndToken } from "features/auth/utils/auth";
 // graphql
 import { SIGN_UP } from "graphql/mutations/auth";
 import { apolloClient } from "graphql/apolloClient";
-import { IUser } from "interfaces/User";
+import { IUser } from "models/User";
 
 const RegisterModal = () => {
   const { showRegister, setShowRegister } = useContext(AuthContext);
@@ -61,18 +61,19 @@ const Register = () => {
         name: name.trim(),
         firebaseId: "",
       };
-      const { data } = await apolloClient.mutate<IUser>({
+      const { data } = await apolloClient.mutate<{ createUser: IUser }>({
         mutation: SIGN_UP,
         variables: { input: { ...userInfo } },
       });
+      const newUser = data?.createUser;
 
-      if (!data) {
+      if (!newUser) {
         setLoading(false);
         message.error("Something went wrong. Please try again.");
         return;
       }
-      setUser(data);
-      saveUserAndToken(data, data["token"]);
+      setUser(newUser);
+      saveUserAndToken(newUser, newUser["token"]);
       form.resetFields();
       message.success("Account created successfully.");
       setLoading(false);

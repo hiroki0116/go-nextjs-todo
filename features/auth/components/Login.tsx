@@ -22,7 +22,7 @@ import { AuthContext } from "features/auth/store/AuthContext";
 // graphql
 import { FIND_USER_BY_EMAIL } from "graphql/queries/user";
 import { apolloClient } from "graphql/apolloClient";
-import { IUser } from "interfaces/User";
+import { IUser } from "models/User";
 
 const LoginModal = () => {
   const { showLogin, setShowLogin } = useContext(AuthContext);
@@ -94,14 +94,16 @@ const Login = ({ isToggle }: { isToggle?: boolean }) => {
       const res = await signInWithEmailAndPassword(auth, email, password);
       const { user } = res;
       const idTokenResult = await user.getIdTokenResult();
-      const { data } = await apolloClient.query<IUser>({
+      const { data } = await apolloClient.query<{ userByEmail: IUser }>({
         query: FIND_USER_BY_EMAIL,
         variables: { email: user.email },
       });
 
-      setUser(data);
+      const currUser = data.userByEmail;
+
+      setUser(currUser);
       setLoading(false);
-      saveUserAndToken(data, idTokenResult.token);
+      saveUserAndToken(currUser, idTokenResult.token);
       form.resetFields();
       message.success("Login success.");
       setShowLogin(false);

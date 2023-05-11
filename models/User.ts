@@ -1,10 +1,10 @@
 import { Dayjs } from "dayjs";
 
-export type User = {
-  id: number;
+export interface IUser {
+  id?: number;
   name: string;
   email: string;
   firebaseId: string;
-  createdAt: Dayjs;
-  updatedAt: Dayjs;
-};
+  createdAt?: Dayjs;
+  updatedAt?: Dayjs;
+}
