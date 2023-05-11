@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
-import { signInWithGoogle } from "features/auth/utils/auth";
+import { saveUserAndToken, signInWithGoogle } from "features/auth/utils/auth";
 // Third party
 import message from "antd/lib/message";
 import Divider from "antd/lib/divider";
@@ -21,7 +21,8 @@ import { auth } from "utils/firebase";
 import { AuthContext } from "features/auth/store/AuthContext";
 // graphql
 import { FIND_USER_BY_EMAIL } from "graphql/queries/user";
-import { apolloClient } from "utils/apolloClient";
+import { apolloClient } from "graphql/apolloClient";
+import { IUser } from "interfaces/User";
 
 const LoginModal = () => {
   const { showLogin, setShowLogin } = useContext(AuthContext);
@@ -63,7 +64,8 @@ const Login = ({ isToggle }: { isToggle?: boolean }) => {
     form.setFieldsValue({
       email: email.toLowerCase().trim(),
     });
-    // setAttemptCount(1);
+
+    // eslint-disable-next-line
   }, [email]);
 
   useEffect(() => {
@@ -92,20 +94,18 @@ const Login = ({ isToggle }: { isToggle?: boolean }) => {
       const res = await signInWithEmailAndPassword(auth, email, password);
       const { user } = res;
       const idTokenResult = await user.getIdTokenResult();
-      const { data } = await apolloClient.query({
+      const { data } = await apolloClient.query<IUser>({
         query: FIND_USER_BY_EMAIL,
         variables: { email: user.email },
       });
 
-      console.log(data);
-
-      // setUser(data.data);
-      // setLoading(false);
-      // saveUserAndToken(data.data, idTokenResult.token);
-      // form.resetFields();
-      // message.success("Login success.");
-      // setShowLogin(false);
-      // router.push("/dashboard");
+      setUser(data);
+      setLoading(false);
+      saveUserAndToken(data, idTokenResult.token);
+      form.resetFields();
+      message.success("Login success.");
+      setShowLogin(false);
+      router.push("/tasks");
     } catch (error: any) {
       if (error.code === "auth/user-not-found") {
         setShowLogin(false);

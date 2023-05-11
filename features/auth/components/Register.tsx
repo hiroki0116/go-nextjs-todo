@@ -13,7 +13,7 @@ import { AuthContext } from "features/auth/store/AuthContext";
 import { saveUserAndToken } from "features/auth/utils/auth";
 // graphql
 import { SIGN_UP } from "graphql/mutations/auth";
-import { apolloClient } from "utils/apolloClient";
+import { apolloClient } from "graphql/apolloClient";
 import { IUser } from "interfaces/User";
 
 const RegisterModal = () => {

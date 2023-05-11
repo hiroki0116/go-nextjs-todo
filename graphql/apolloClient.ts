@@ -6,7 +6,7 @@ import {
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
-import { auth } from "./firebase";
+import { auth } from "../utils/firebase";
 import { getCookie, setCookie, isAuth } from "../features/auth/utils/auth";
 
 const httpLink = createHttpLink({
