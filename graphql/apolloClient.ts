@@ -14,6 +14,17 @@ const httpLink = createHttpLink({
   credentials: "include",
 });
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
 const getToken = async (): Promise<string> => {
   const user = auth.currentUser;
   if (!user) {
@@ -46,7 +57,7 @@ const options = {
 };
 
 const apolloClient = new ApolloClient({
-  link: from([authLink, httpLink]),
+  link: from([authLink, httpLink, errorLink]),
   cache: new InMemoryCache(options),
 });
 

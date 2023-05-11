@@ -8,13 +8,15 @@ import Input from "antd/lib/input";
 import Button from "antd/lib/button";
 import Divider from "antd/lib/divider";
 import message from "antd/lib/message";
+import GoogleOutlined from "@ant-design/icons/GoogleOutlined";
 // context
 import { AuthContext } from "features/auth/store/AuthContext";
-import { saveUserAndToken } from "features/auth/utils/auth";
+import { saveUserAndToken, signInWithGoogle } from "features/auth/utils/auth";
 // graphql
 import { SIGN_UP } from "graphql/mutations/auth";
 import { apolloClient } from "graphql/apolloClient";
 import { IUser } from "models/User";
+import { FIND_USER_BY_EMAIL } from "graphql/queries/user";
 
 const RegisterModal = () => {
   const { showRegister, setShowRegister } = useContext(AuthContext);
@@ -93,18 +95,45 @@ const Register = () => {
     }
   };
 
+  const checkEmailExists = () => ({
+    async validator(_, value) {
+      if (value) {
+        try {
+          const { data } = await apolloClient.query<{ userByEmail: IUser }>({
+            query: FIND_USER_BY_EMAIL,
+            variables: { email: value },
+          });
+
+          if (data?.userByEmail) {
+            return Promise.reject(
+              "We found an existing account with this email. Please click Login below."
+            );
+          }
+        } catch (error) {
+          return Promise.resolve();
+        }
+      }
+      return Promise.resolve();
+    },
+  });
+
+  const handleGoogleSignIn = () => {
+    const props = {
+      setLoading,
+      setShowLogin,
+      setUser,
+      message,
+      router,
+    };
+    signInWithGoogle(props);
+  };
+
   const emailForm = () => (
     <Form form={form} onFinish={handleSubmit} onKeyPress={handleFormOnKeyPress}>
       <span className="grid grid-cols-2 gap-4 mt-3">
         <Form.Item
           name="name"
-          rules={[
-            { required: true, message: "Please enter your nickname" },
-            {
-              max: 15,
-              message: "Nickname cannot be longer than 15 characters",
-            },
-          ]}
+          rules={[{ required: true, message: "Please enter your nickname" }]}
           required
         >
           <Input
@@ -122,6 +151,7 @@ const Register = () => {
           { required: true, message: "Please enter your email" },
           { whitespace: true, message: "Email cannot be empty" },
           { type: "email", message: "Not valid email" },
+          checkEmailExists,
         ]}
         required
         normalize={(value) => value.trim()}
@@ -136,25 +166,33 @@ const Register = () => {
         rules={[
           { required: true, message: "Please enter password" },
           { whitespace: true, message: "Password cannot be empty" },
+          { min: 6, message: "Password needs to be minimum 6 characters." },
         ]}
         required
       >
         <Input.Password
-          className="p-2 rounded font-dark-gray text-16"
+          className="p-2 rounded font-dark-gray"
           placeholder="Password"
           disabled={loading}
         />
       </Form.Item>
-      <div className="flex justify-center">
-        <Button
-          className="w-full rounded h-auto py-2 mb-2"
-          htmlType="submit"
-          type="primary"
-          disabled={loading}
-        >
-          Sign Up
-        </Button>
-      </div>
+      {/* {commonItem()} */}
+      <Button
+        className="w-full rounded h-auto py-2 mb-2"
+        htmlType="submit"
+        type="primary"
+        disabled={loading}
+      >
+        Sign Up
+      </Button>
+      <div className="text-center text-gray-600">or</div>
+      <Button
+        icon={<GoogleOutlined />}
+        className="w-full rounded-lg"
+        onClick={handleGoogleSignIn}
+      >
+        Signup with Google
+      </Button>
       <Divider />
     </Form>
   );
@@ -163,8 +201,8 @@ const Register = () => {
     <Spin spinning={loading}>
       <div className="p-6">
         {emailForm()}
-        <div className="font-dark-gray text-center tracking-tighter">
-          Already have a Spare Staff account?
+        <div className="font-dark-gray text-center">
+          Already have an account?
           <Button
             type="link"
             onClick={() => {

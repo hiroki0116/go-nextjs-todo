@@ -33,13 +33,19 @@ export const signInWithGoogle = ({
     .then(async (result: any) => {
       setLoading(true);
       const googleUser = result.user;
-      const { data } = await apolloClient.query<{ userByEmail: IUser }>({
+      const { data, error } = await apolloClient.query<{ userByEmail: IUser }>({
         query: FIND_USER_BY_EMAIL,
         variables: { email: googleUser.email },
+        errorPolicy: "all",
       });
-      const currUser = data.userByEmail;
 
-      if (isEmpty(currUser)) {
+      if (error) {
+        console.log(error);
+        return;
+      }
+      const currUser = data?.userByEmail;
+
+      if (!currUser) {
         const { data } = await apolloClient.mutate<{ createUser: IUser }>({
           mutation: SIGN_UP,
           variables: {
@@ -72,8 +78,9 @@ export const signInWithGoogle = ({
       setShowLogin(false);
       router.push("/tasks");
     })
-    .catch((error) => {
-      message.error(error.message);
+    .then((error) => {
+      console.log(error);
+      setLoading(false);
     });
 };
 
