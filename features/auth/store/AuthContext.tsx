@@ -1,12 +1,12 @@
 import React, { useState, useEffect, createContext } from "react";
 import { IUser } from "interfaces/User";
-import { isAuth, removeCookie } from "utils/auth";
-import message from 'antd/lib/message';
-import { useRouter } from 'next/router';
+import { isAuth, removeCookie } from "features/auth/utils/auth";
+import message from "antd/lib/message";
+import { useRouter } from "next/router";
 
 type AuthContent = {
   user: IUser | undefined;
-  setUser: (u: IUser | undefined) => void;
+  setUser: (u: IUser) => void;
   showLogin: boolean;
   setShowLogin: (show: boolean) => void;
   showRegister: boolean;
@@ -32,7 +32,12 @@ export const AuthContext = createContext<AuthContent>(initialState);
 
 export const AuthProvider = ({ children }: { children: any }) => {
   const [isLoggedin, setIsLoggedin] = useState(false);
-  const [user, setUser] = useState<IUser | undefined>(undefined);
+  const [user, setUser] = useState<IUser>({
+    _id: "",
+    name: "",
+    email: "",
+    firebaseId: "",
+  });
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const router = useRouter();
@@ -63,7 +68,7 @@ export const AuthProvider = ({ children }: { children: any }) => {
     setShowRegister,
     isLoggedin,
     setIsLoggedin,
-    handleLogout
+    handleLogout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

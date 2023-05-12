@@ -1,13 +1,12 @@
 import { useState, useContext } from "react";
 import Button from "antd/lib/button";
 import message from "antd/lib/message";
-import { TaskContext } from "context/TaskContext";
+import { TaskContext } from "features/task/store/TaskContext";
 // services
 import { createTask } from "services/task";
 
 const CreateTask = () => {
-  const { loading, setLoading, tasks, setTasks } =
-    useContext(TaskContext);
+  const { loading, setLoading, tasks, setTasks } = useContext(TaskContext);
   const [task, setTask] = useState("");
 
   const handleCreateTask = async () => {

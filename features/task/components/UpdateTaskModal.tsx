@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 // components
-import { TaskContext } from "context/TaskContext";
+import { TaskContext } from "features/task/store/TaskContext";
 // services
 import { fetchTaskById, updateTaskById } from "services/task";
 // types

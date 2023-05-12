@@ -7,10 +7,10 @@ import BuildFilled from "@ant-design/icons/BuildFilled";
 import Button from "antd/lib/button";
 import Marquee from "react-fast-marquee";
 // context
-import { AuthContext } from "context/AuthContext";
+import { AuthContext } from "features/auth/store/AuthContext";
 // components
-import { LoginModal } from "components/Auth/Login";
-import { RegisterModal } from "components/Auth/Register";
+import { LoginModal } from "features/auth/components/Login";
+import { RegisterModal } from "features/auth/components/Register";
 
 const NavBar = () => {
   const { setShowLogin, setShowRegister, isLoggedin, handleLogout } =
